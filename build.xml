@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project default="build">
+
+<!-- APPLICATION METADATA -->
+<property name="masysma.target" value="okapibarcode"/> 
+<property name="mdpc.name"      value="mdvl-okapibarcode"/>
+<property name="mdpc.section"   value="java"/>
+<property name="mdpc.descrs"    value="Open-source barcode encoding program written in Java "/>
+<property name="mdpc.arch"      value="all"/>
+<property name="mdpc.descrl">
+ Okapi Barcode is an open-source barcode generator written entirely in Java,
+ supporting over 50 encoding standards, including all ISO standards.
+ Okapi Barcode is based on Zint, an open-source barcode encoding library
+ developed in C, and builds on the years of work that have been invested in
+ that project.
+</property>
+<property name="mdpc.copyright" value="Copyright 2014-2015 Robin Stuart, Robert Elliott"/>
+<property name="mdpc.lblock">
+License: Apache-2.0
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+ .
+ http://www.apache.org/licenses/LICENSE-2.0
+ .
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+License-Reference: /usr/share/common-licenses/Apache-2.0
+</property>
+
+<property name="mdpc.file.install"
+	value="build/build/libs/okapibarcode-0.2.3.jar /usr/share/java"/>
+
+<!-- PART OF TPL HERE FOR USE IN BUILD -->
+<property environment="env"/>
+<condition property="masysma.internal.includepath.rel" value="${env.MDVL_CI_PHOENIX_ROOT}" else=".."><isset property="env.MDVL_CI_PHOENIX_ROOT"/></condition>
+<property name="masysma.internal.includepath" location="${masysma.internal.includepath.rel}"/>
+
+<!-- SPECIFIC BUILD -->
+<target name="download">
+	<masysma_require_artifact
+			masysmaartifact="okapibarcode.git"
+			masysmaatarget="build"
+			masysmaadef="https://github.com/woo-j/OkapiBarcode"/>
+</target>
+
+<target name="build" depends="download">
+	<exec dir="build" executable="./gradlew">
+		<arg value="jar"/>
+		<arg value="-x"/>
+		<arg value="test"/>
+	</exec>
+</target>
+
+<target name="clean"><delete dir="build"/></target>
+<target name="dist-clean" depends="clean"><delete file="jexer.jar"/></target>
+
+<!-- CI INTEGRATION -->
+<target name="package_triggered" depends="package">
+	<property name="masysma.ci.trigger" value="newver"/>
+</target>
+
+<!-- TPL IMPORT (PARTIALLY GIVEN ABOVE) -->
+<property name="masysma.internal.loadpath" value="${masysma.internal.includepath}/co-build/ant-build-template.xml"/>
+<condition property="masysma.internal.load" value="file://${masysma.internal.loadpath}" else="https://raw.githubusercontent.com/m7a/co-build/master/ant-build-template.xml"><resourceexists><file file="${masysma.internal.loadpath}"/></resourceexists></condition>
+<import><url url="${masysma.internal.load}"/></import>
+
+</project>
