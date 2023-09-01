@@ -59,9 +59,7 @@ License-Reference: /usr/share/common-licenses/Apache-2.0
 <target name="dist-clean" depends="clean"><delete file="jexer.jar"/></target>
 
 <!-- CI INTEGRATION -->
-<target name="package_triggered" depends="package">
-	<property name="masysma.ci.trigger" value="newver"/>
-</target>
+<target name="autoci" depends="autopackage"/>
 
 <!-- TPL IMPORT (PARTIALLY GIVEN ABOVE) -->
 <property name="masysma.internal.loadpath" value="${masysma.internal.includepath}/co-build/ant-build-template.xml"/>
